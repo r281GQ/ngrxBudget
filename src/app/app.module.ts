@@ -5,9 +5,12 @@ import {HttpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
 import {combineReducers, StoreModule} from "@ngrx/store";
-import {model, transactionFilter, user, reducer} from "./ngrx/reducer/reducer";
+import {model, transactionFilter, reducer} from "./ngrx/reducer/reducer";
 import {INITIAL_STATE} from "./ngrx/store/application-state";
 import {reduce} from "rxjs/operator/reduce";
+import {TransactionEffectService} from "./ngrx/effect/transaction-effect.service";
+import {RepoService} from "./repo/repo.service";
+import {EffectsModule} from "@ngrx/effects";
 
 @NgModule({
   declarations: [
@@ -18,9 +21,13 @@ import {reduce} from "rxjs/operator/reduce";
     FormsModule,
     HttpModule,
     ReactiveFormsModule,
-    StoreModule.provideStore(reducer, INITIAL_STATE)
+    StoreModule.provideStore(reducer, INITIAL_STATE),
+    EffectsModule.run(TransactionEffectService)
   ],
-  providers: [],
+  providers: [
+    TransactionEffectService,
+    RepoService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

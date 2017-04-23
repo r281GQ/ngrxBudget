@@ -3,10 +3,12 @@
  */
 
 export interface ApplicationState {
-  user: {
-    id: number
-    email: string;
-    name: string;
+  auth: {
+    user: {
+      id: number
+      email: string;
+      name: string;
+    }
   },
   transactionFilter: {
     query: string,
@@ -84,10 +86,12 @@ export interface ApplicationState {
 }
 
 export const INITIAL_STATE: ApplicationState = {
-  user: {
-    id: undefined,
-    email: undefined,
-    name: undefined
+  auth: {
+    user: {
+      id: undefined,
+      email: undefined,
+      name: undefined
+    }
   },
   transactionFilter: {
     query: '',
