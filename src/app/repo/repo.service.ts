@@ -17,6 +17,6 @@ export class RepoService {
   }
 
   fetchGrouping(identifier: number): Observable <Grouping> {
-    return Observable.of(null);
+    return Observable.of({identifier: identifier, type: 'Expense', name: 'rent'});
   }
 }
