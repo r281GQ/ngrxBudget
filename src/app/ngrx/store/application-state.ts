@@ -28,10 +28,10 @@ export const INITIAL_STATE: ApplicationState = {
     id: undefined
   },
   transactionFilters: {
-    query: '',
-    date: '',
-    filterBy: '',
-    id: 0
+    query: undefined,
+    date: undefined,
+    filterBy: undefined,
+    id: undefined
   },
   model: {
     user: {}

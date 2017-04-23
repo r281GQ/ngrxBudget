@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {StoreModule} from "@ngrx/store";
-import {queryReducer} from "./ngrx/reducer/reducer";
+import {transactionFilterReducer} from "./ngrx/reducer/reducer";
 import {INITIAL_STATE} from "./ngrx/store/application-state";
 
 @NgModule({
@@ -16,7 +16,7 @@ import {INITIAL_STATE} from "./ngrx/store/application-state";
     BrowserModule,
     FormsModule,
     HttpModule,
-    StoreModule.provideStore(queryReducer, INITIAL_STATE)
+    StoreModule.provideStore(transactionFilterReducer, INITIAL_STATE)
   ],
   providers: [],
   bootstrap: [AppComponent]
