@@ -5,7 +5,6 @@
 import * as _ from 'lodash';
 import {ApplicationState, INITIAL_STATE} from "../store/application-state";
 import {Action} from "@ngrx/store";
-import {init} from "protractor/built/launcher";
 
 export const UPDATE_QUERY: string = 'updateQuery';
 export const UPDATE_DATE: string = 'updateDate';

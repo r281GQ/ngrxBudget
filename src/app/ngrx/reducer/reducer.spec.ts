@@ -101,4 +101,16 @@ describe('reducer', () => {
 
   });
 
+  it('modelUpdate/AccountCreate', () => {
+    let initState = INITIAL_STATE.model;
+
+    let modifiedState = model(initState, new CreateAccount({identifier: 1, name: 'main', currency: 'GBP', balance: 100}));
+
+    expect(initState).not.toEqual(modifiedState);
+
+    expect(modifiedState.accounts[1].name).toBe('main');
+    expect(modifiedState.accounts[2]).toBe(undefined);
+
+  });
+
 });
