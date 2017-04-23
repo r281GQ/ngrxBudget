@@ -1,7 +1,8 @@
 import {INITIAL_STATE} from "../store/application-state";
 import * as _ from 'lodash';
-import {transactionFilterReducer} from "./reducer";
-import {DateUpdate, FilterUpdate, QueryUpdate} from "../action/action";
+import {model, transactionFilter} from "./reducer";
+import {DateUpdate, FilterUpdate, IdUpdate, QueryUpdate} from "../action/transaction-filter.actions";
+import {CreateAccount} from "../action/model.actions";
 /**
  * Created by veghe on 23/04/2017.
  */
@@ -11,19 +12,19 @@ describe('reducer', () => {
 
     const queryToBePassed: string = 'salary';
 
-    let initState = INITIAL_STATE;
+    let initState = INITIAL_STATE.transactionFilter;
 
-    expect(initState.transactionFilters.query).toBe(undefined);
+    expect(initState.query).toBe('');
 
-    let modifiedState = transactionFilterReducer(initState, new QueryUpdate(queryToBePassed));
+    let modifiedState = transactionFilter(initState, new QueryUpdate(queryToBePassed));
 
-    expect(initState.transactionFilters.query).toBe(undefined);
+    expect(initState.query).toBe('');
 
-    expect(initState).toEqual(INITIAL_STATE);
+    expect(initState).toEqual(INITIAL_STATE.transactionFilter);
 
     expect(initState).not.toEqual(modifiedState);
 
-    expect(modifiedState.transactionFilters.query).toBe(queryToBePassed);
+    expect(modifiedState.query).toBe(queryToBePassed);
 
   });
 
@@ -31,19 +32,19 @@ describe('reducer', () => {
 
     const dateToBePassed: string = '03-2017';
 
-    let initState = INITIAL_STATE;
+    let initState = INITIAL_STATE.transactionFilter;
 
-    expect(initState.transactionFilters.date).toBe(undefined);
+    expect(initState.date).toBe('');
 
-    let modifiedState = transactionFilterReducer(initState, new DateUpdate(dateToBePassed));
+    let modifiedState = transactionFilter(initState, new DateUpdate(dateToBePassed));
 
-    expect(initState.transactionFilters.date).toBe(undefined);
+    expect(initState.date).toBe('');
 
-    expect(initState).toEqual(INITIAL_STATE);
+    expect(initState).toEqual(INITIAL_STATE.transactionFilter);
 
     expect(initState).not.toEqual(modifiedState);
 
-    expect(modifiedState.transactionFilters.date).toBe(dateToBePassed);
+    expect(modifiedState.date).toBe(dateToBePassed);
 
   });
 
@@ -51,39 +52,53 @@ describe('reducer', () => {
 
     const filterByToBePassed: string = 'account';
 
-    let initState = INITIAL_STATE;
+    let initState = INITIAL_STATE.transactionFilter;
 
-    expect(initState.transactionFilters.filterBy).toBe(undefined);
+    expect(initState.filterBy).toBe('');
 
-    let modifiedState = transactionFilterReducer(initState, new FilterUpdate(filterByToBePassed));
+    let modifiedState = transactionFilter(initState, new FilterUpdate(filterByToBePassed));
 
-    expect(initState.transactionFilters.filterBy).toBe(undefined);
+    expect(initState.filterBy).toBe('');
 
-    expect(initState).toEqual(INITIAL_STATE);
+    expect(initState).toEqual(INITIAL_STATE.transactionFilter);
 
     expect(initState).not.toEqual(modifiedState);
 
-    expect(modifiedState.transactionFilters.filterBy).toBe(filterByToBePassed);
+    expect(modifiedState.filterBy).toBe(filterByToBePassed);
 
   });
 
   it('idUpdate', () => {
 
-    const filterByToBePassed: string = 'account';
+    const idToBePassed: number = 1;
 
-    let initState = INITIAL_STATE;
+    let initState = INITIAL_STATE.transactionFilter;
 
-    expect(initState.transactionFilters.filterBy).toBe(undefined);
+    expect(initState.id).toBe(0);
 
-    let modifiedState = transactionFilterReducer(initState, new FilterUpdate(filterByToBePassed));
+    let modifiedState = transactionFilter(initState, new IdUpdate(idToBePassed));
 
-    expect(initState.transactionFilters.filterBy).toBe(undefined);
+    expect(initState.id).toBe(0);
 
-    expect(initState).toEqual(INITIAL_STATE);
+    expect(initState).toEqual(INITIAL_STATE.transactionFilter);
 
     expect(initState).not.toEqual(modifiedState);
 
-    expect(modifiedState.transactionFilters.filterBy).toBe(filterByToBePassed);
+    expect(modifiedState.id).toBe(idToBePassed);
 
   });
+
+
+  it('modelUpdate/AccountCreate', () => {
+    let initState = INITIAL_STATE.model;
+
+    let modifiedState = model(initState, new CreateAccount({identifier: 1, name: 'main', currency: 'GBP', balance: 100}));
+
+    expect(initState).not.toEqual(modifiedState);
+
+    expect(modifiedState.accounts[1].name).toBe('main');
+    expect(modifiedState.accounts[2]).toBe(undefined);
+
+  });
+
 });
