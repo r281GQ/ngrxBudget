@@ -5,6 +5,7 @@
 import * as _ from 'lodash';
 import {ApplicationState, INITIAL_STATE} from "../store/application-state";
 import {Action} from "@ngrx/store";
+import {handleUpdateAll} from "./model-reducer/misc-handler";
 
 export const UPDATE_QUERY: string = 'updateQuery';
 export const UPDATE_DATE: string = 'updateDate';
@@ -14,15 +15,41 @@ export const UPDATE_ID: string = 'updateId';
 export const CREATE_ACCOUNT: string = 'createAccount';
 export const UPDATE_ACCOUNT: string = 'updateAccount';
 export const DELETE_ACCOUNT: string = 'deleteAccount';
+export const GET_ACCOUNT: string = 'getAccount';
+export const GET_ACCOUNTS_BY_USER: string = 'getAccountsByUser';
+
+export const PERSIST_ACCOUNT: string = 'persistAccount';
+export const REFRESH_ACCOUNT: string = 'refreshAccount';
+export const REMOVE_ACCOUNT: string = 'removeAccount';
+export const FETCH_ACCOUNT: string = 'fetchAccount';
+export const FETCH_ACCOUNTS_BY_USER: string = 'fetchAccountsByUser';
+
+
+export const FETCH_EQUITY: string = 'fetchEquity';
+export const FETCH_EQUITIES_BY_USER: string = 'fetchEquitiesByUser';
+
 
 export const CREATE_TRANSACTION: string = 'createTransaction';
+export const REMOVE_TRANSACTION: string = 'removeTransaction';
 
-export const GROUPING_FETCH: string = 'groupingFetch';
-
-export const UPDATE_GROUPING: string = 'updateGrouping';
 
 export const PERSIST_TRANSACTION: string = 'persistTransaction';
 
+export const FETCH_GROUPING: string = 'fetchGrouping';
+
+export const UPDATE_GROUPING: string = 'updateGrouping';
+
+export const FETCH_ALL: string = 'fetchAll';
+export const UPDATE_ALL: string = 'updateAll';
+
+
+/**
+ * Main reducer function aggregating the state.
+ *
+ * @param state
+ * @param action
+ * @returns {ApplicationState}
+ */
 export function reducer(state: ApplicationState = INITIAL_STATE, action: Action) {
   return {
     auth: state.auth,
@@ -56,6 +83,30 @@ function handleAccountDelete(state: any, action: Action) {
   return newState;
 }
 
+
+function handleTransactionRemove(state: any, action: Action) {
+  let newState = _.cloneDeep(state);
+  let identifier = action.payload;
+
+  let transaction = _.cloneDeep(newState.transactions[identifier]);
+
+  let newArray = _.filter(newState.accounts[transaction.account].transactions, identifier);
+
+  newState.accounts[transaction.account].transactions = newArray;
+
+  // _.remove(newState.accounts[transaction.account].transactions, identifier);
+
+  delete newState.transactions[identifier];
+
+  return newState;
+}
+/**
+ * Responsible for maintaining the model part of the application state.
+ *
+ * @param state
+ * @param action
+ * @returns {ApplicationState.model}
+ */
 export function model(state, action: Action) {
   switch (action.type) {
     case CREATE_ACCOUNT:
@@ -66,6 +117,10 @@ export function model(state, action: Action) {
       return handleAccountDelete(state, action);
     case CREATE_TRANSACTION:
       return handleTransactionCreation(state, action);
+    case UPDATE_ALL:
+      return handleUpdateAll(state, action);
+    case REMOVE_TRANSACTION:
+      return handleTransactionRemove(state, action);
     default:
       return state;
   }
@@ -73,9 +128,18 @@ export function model(state, action: Action) {
 
 function handleTransactionCreation(state, action: Action) {
   let newState = _.cloneDeep(state);
-  console.log('inside tra crea');
+
   newState.transactions[action.payload.identifier] = action.payload;
   newState.accounts[action.payload.account].transactions.push(action.payload.identifier);
+  newState.groupings[action.payload.grouping].transactions.push(action.payload.identifier);
+
+  if (!_.isUndefined(action.payload.budget)) {
+    newState.budgets[action.payload.budget].transactions.push(action.payload.identifier);
+    newState.budgetPeriods[action.payload.budgetPeriod].transactions.push(action.payload.identifier);
+  }
+
+  if (!_.isUndefined(action.payload.equity))
+    newState.equities[action.payload.equity].transactions.push(action.payload.identifier);
   return newState;
 }
 
@@ -92,7 +156,6 @@ function handleAccountUpdate(state, action: Action) {
 }
 
 function handleQueryUpdate(state, action: Action) {
-  console.log('inside tra query');
   let newState = _.cloneDeep(state);
   newState.query = action.payload;
   return newState;
@@ -105,7 +168,6 @@ function handleDateUpdate(state, action: Action) {
 }
 
 function handleFilterByUpdate(state, action: Action) {
-  console.log('inside tra filter');
   let newState = _.cloneDeep(state);
   newState.filterBy = action.payload;
   return newState;

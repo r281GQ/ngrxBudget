@@ -6,8 +6,14 @@ export interface Account {
   name: string,
   balance: number,
   currency: string,
-  transactions: number []
+  transactions?: number []
 }
+
+export interface Budget {}
+
+export interface BudgetPeriod {}
+
+export interface Equity {}
 
 export interface Transaction {
   currency: string,
@@ -28,6 +34,5 @@ export interface Grouping {
   identifier: number,
   name: string,
   type: string,
-  // currency: string,
-  // transactions: number []
+  transactions?: number []
 }

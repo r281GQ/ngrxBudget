@@ -76,9 +76,9 @@ export interface ApplicationState {
         creationDate: string,
         period: string,
         account: number,
-        budget: number,
-        budgetPeriod: number,
-        equity: number,
+        budget?: number,
+        budgetPeriod?: number,
+        equity?: number,
         grouping: number
       }
     }

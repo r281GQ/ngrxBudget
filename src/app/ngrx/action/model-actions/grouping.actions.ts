@@ -1,17 +1,17 @@
 import {Action} from "@ngrx/store";
-import {GROUPING_FETCH, UPDATE_GROUPING} from "../../reducer/reducer";
+import {FETCH_GROUPING, UPDATE_GROUPING} from "../../reducer/reducer";
 import {Grouping} from "../../../model/model";
 /**
  * Created by veghe on 23/04/2017.
  */
 
 
-export class GroupingFetch implements Action {
-  type: string = GROUPING_FETCH;
-  payload: any;
+export class FetchGrouping implements Action {
+  type: string = FETCH_GROUPING;
+  payload: number;
 
-  constructor (id: number){
-    this.payload = id;
+  constructor (payload: number){
+    this.payload = payload;
   }
 
 }
