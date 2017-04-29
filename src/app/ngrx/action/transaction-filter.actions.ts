@@ -20,7 +20,6 @@ export class DateUpdate implements Action {
   readonly type: string;
   payload: string;
 
-
   constructor(payload: string) {
     this.type = UPDATE_DATE;
     this.payload = payload;
@@ -31,7 +30,6 @@ export class FilterUpdate implements Action {
   readonly type: string;
   payload: string;
 
-
   constructor(payload: string) {
     this.type = UPDATE_FILTER;
     this.payload = payload;
@@ -41,7 +39,6 @@ export class FilterUpdate implements Action {
 export class IdUpdate implements Action {
   readonly type: string;
   payload: number;
-
 
   constructor(payload: number) {
     this.type = UPDATE_ID;

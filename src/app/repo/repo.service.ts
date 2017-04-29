@@ -59,4 +59,20 @@ export class RepoService {
   fetchAll(): Observable<any> {
     return null;
   }
+
+  updateTransaction(transaction: Transaction):Observable<Transaction> {
+    return null;
+  }
+
+  updateGrouping(grouping: Grouping): Observable<Grouping> {
+    return null;
+  }
+
+  removeGrouping(identifier: number): Observable<number> {
+    return null;
+  }
+
+  createGrouping(grouping: Grouping): Observable<Grouping> {
+    return null;
+  }
 }

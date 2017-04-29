@@ -1,13 +1,12 @@
 import {Action} from "@ngrx/store";
 import {forEach, cloneDeep, isUndefined} from 'lodash';
 
-
 /**
  Recreates the whole data state in the store.
  Used only in the initial fetch, removals and in transaction updates where due to the inter dependency between models makes it
  easier to fetch the whole database to the store again.
  */
-export function handleUpdateAll(state: any, action: Action) {
+export const handleUpdateAll = (state: any, action: Action) => {
 
   let newState = resetValues(state);
 
@@ -52,7 +51,6 @@ export function handleUpdateAll(state: any, action: Action) {
 }
 
 const resetValues = (defaultState) => {
-
   let newState = cloneDeep(defaultState);
 
   newState.accounts = {};

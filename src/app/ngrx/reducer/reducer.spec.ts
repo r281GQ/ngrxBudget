@@ -1,11 +1,12 @@
 import {INITIAL_STATE} from "../store/application-state";
 import * as _ from 'lodash';
-import {model, transactionFilter} from "./reducer";
+import {model} from "./reducer";
 import {DateUpdate, FilterUpdate, IdUpdate, QueryUpdate} from "../action/transaction-filter.actions";
 import {CreateAccount, DeleteAccount, UpdateAccount} from "../action/model-actions/account.actions";
-import {CreateTransaction, RemoveTransaction} from "../action/model-actions/transaction.actions";
+import {CreateTransaction, RemoveTransaction, UpdateTransaction} from "../action/model-actions/transaction.actions";
 import {UpdateAll} from "../action/model-actions/misc.actions";
 import {RawDataBase} from "../../repo/repo.service";
+import {transactionFilter} from "./transaction-filter-reducer";
 /**
  * Created by veghe on 23/04/2017.
  */
@@ -136,7 +137,7 @@ describe('reducer', () => {
 
   });
 
-  it('modelUpdate/AccountUpdate', () => {
+  it('modelUpdate/AccountRemoval', () => {
     let initState = INITIAL_STATE.model;
 
     initState.accounts[1] = {
@@ -154,9 +155,29 @@ describe('reducer', () => {
     // expect(initState).not.toEqual(modifiedState);
 
     // expect(modifiedState.accounts[1].name).toBe('main');
-    expect(modifiedState.accounts[1]).toBe(undefined);
+    expect(modifiedState.accounts[1] ).toBe(undefined);
 
   });
+
+  // it('modelUpdate/updateTransaction', ()=>{
+  //   let initState = INITIAL_STATE.model;
+  //    initState.accounts[1] = {
+  //     name: 'main',
+  //     identifier: 1,
+  //     balance: 100,
+  //     currency: 'GBP',
+  //     transactions: [1, 4, 42]
+  //   };
+  //
+  //   initState.transactions[42] = {grouping: 2, name: 'sample', account: 1, memo:'', creationDate:'', amount: 50, period: '', currency:'', identifier:42};
+  //
+  //   let modifiedState = model(initState, new UpdateTransaction({grouping: 2, name: 'sample', account: 1, memo:'', creationDate:'', amount: 50, period: '', currency:'', identifier:42}));
+  //
+  //   expect(modifiedState.accounts[1].transactions).toContain(42);
+  //   expect(modifiedState.transactions[42]).not.toBeDefined();
+  //
+  //
+  // })
 
   it('modelUpdate/RemoveTransaction', ()=>{
 

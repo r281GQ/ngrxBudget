@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import {ApplicationState, INITIAL_STATE} from "../store/application-state";
 import {Action} from "@ngrx/store";
 import {handleUpdateAll} from "./model-reducer/misc-handler";
+import {transactionFilter} from "./transaction-filter-reducer";
 
 export const UPDATE_QUERY: string = 'updateQuery';
 export const UPDATE_DATE: string = 'updateDate';
@@ -34,8 +35,15 @@ export const REMOVE_TRANSACTION: string = 'removeTransaction';
 
 
 export const PERSIST_TRANSACTION: string = 'persistTransaction';
+export const REFRESH_TRANSACTION: string = 'refreshTransaction';
 
 export const FETCH_GROUPING: string = 'fetchGrouping';
+export const REFRESH_GROUPING: string = 'refreshGrouping';
+export const REMOVE_GROUPING: string = 'removeGrouping';
+
+export const PERSIST_GROUPING: string = 'persistGrouping';
+
+export const CREATE_GROUPING: string = 'createGrouping';
 
 export const UPDATE_GROUPING: string = 'updateGrouping';
 
@@ -58,20 +66,20 @@ export function reducer(state: ApplicationState = INITIAL_STATE, action: Action)
   }
 }
 
-export function transactionFilter(state, action: Action) {
-  switch (action.type) {
-    case UPDATE_QUERY:
-      return handleQueryUpdate(state, action);
-    case UPDATE_DATE:
-      return handleDateUpdate(state, action);
-    case UPDATE_FILTER:
-      return handleFilterByUpdate(state, action);
-    case UPDATE_ID:
-      return handleIdUpdate(state, action);
-    default:
-      return state;
-  }
-}
+// export const transactionFilter = (state, action: Action) => {
+//   switch (action.type) {
+//     case UPDATE_QUERY:
+//       return handleQueryUpdate(state, action);
+//     case UPDATE_DATE:
+//       return handleDateUpdate(state, action);
+//     case UPDATE_FILTER:
+//       return handleFilterByUpdate(state, action);
+//     case UPDATE_ID:
+//       return handleIdUpdate(state, action);
+//     default:
+//       return state;
+//   }
+// }
 
 export function auth(state = INITIAL_STATE, action) {
   return state;
@@ -100,6 +108,18 @@ function handleTransactionRemove(state: any, action: Action) {
 
   return newState;
 }
+function handleGroupingUpdate(state: any, action: Action) {
+  let newState = _.cloneDeep(state);
+  let groupingToUpdate = action.payload;
+  newState.groupings[groupingToUpdate.identifier].name = groupingToUpdate.name;
+  return newState;
+}
+function handleGroupingCreate(state: any, action: Action) {
+  let newState = _.cloneDeep(state);
+  let groupingToUpdate = action.payload;
+  newState.groupings[groupingToUpdate.identifier] = groupingToUpdate;
+  return newState;
+}
 /**
  * Responsible for maintaining the model part of the application state.
  *
@@ -121,6 +141,10 @@ export function model(state, action: Action) {
       return handleUpdateAll(state, action);
     case REMOVE_TRANSACTION:
       return handleTransactionRemove(state, action);
+    case CREATE_GROUPING:
+      return handleGroupingCreate(state, action);
+    case UPDATE_GROUPING:
+      return handleGroupingUpdate(state, action);
     default:
       return state;
   }
@@ -155,26 +179,4 @@ function handleAccountUpdate(state, action: Action) {
   return newState;
 }
 
-function handleQueryUpdate(state, action: Action) {
-  let newState = _.cloneDeep(state);
-  newState.query = action.payload;
-  return newState;
-}
 
-function handleDateUpdate(state, action: Action) {
-  let newState = _.cloneDeep(state);
-  newState.date = action.payload;
-  return newState;
-}
-
-function handleFilterByUpdate(state, action: Action) {
-  let newState = _.cloneDeep(state);
-  newState.filterBy = action.payload;
-  return newState;
-}
-
-function handleIdUpdate(state, action: Action) {
-  let newState = _.cloneDeep(state);
-  newState.id = action.payload;
-  return newState;
-}

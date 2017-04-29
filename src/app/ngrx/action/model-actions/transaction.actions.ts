@@ -16,7 +16,11 @@ export class CreateTransaction implements Action {
 
 export class UpdateTransaction implements Action {
   readonly type: string;
+  payload: Transaction;
 
+  constructor(payload: Transaction){
+    this.payload = payload;
+  }
 }
 
 export class DeleteTransaction implements Action {
