@@ -7,7 +7,7 @@ import {
   REMOVE_ACCOUNT, REMOVE_EQUITY,
   UPDATE_ACCOUNT, UPDATE_EQUITY
 } from "../action.types";
-import {Account} from "../../../model/model";
+import {Account, Equity} from "../../../model/model";
 
 export class CreateEquity implements Action {
   readonly type: string = CREATE_EQUITY;
@@ -20,9 +20,9 @@ export class CreateEquity implements Action {
 
 export class UpdateEquity implements Action {
   readonly type: string = UPDATE_EQUITY;
-  payload: Account;
+  payload: Equity;
 
-  constructor(payload: Account) {
+  constructor(payload: Equity) {
     this.payload = payload;
   }
 }
@@ -30,9 +30,9 @@ export class UpdateEquity implements Action {
 
 export class PersistEquity implements Action {
   readonly type: string = PERSIST_EQUITY;
-  payload: Account;
+  payload: Equity;
 
-  constructor(payload: Account) {
+  constructor(payload: Equity) {
     this.payload = payload;
   }
 }

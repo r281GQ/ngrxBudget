@@ -1,7 +1,7 @@
 import {Observable} from "rxjs/Observable";
-import {Account, Grouping, Transaction} from "../../model/model";
+import {Account, Equity, Grouping, Transaction} from "../../model/model";
 import * as _ from "lodash";
-import {sampleAccount, sampleGrouping, sampleTransaction} from "./test.constant";
+import {sampleAccount, sampleEquity, sampleGrouping, sampleTransaction} from "./test.constant";
 
 export class RepoMock {
 
@@ -56,6 +56,24 @@ export class RepoMock {
   }
 
   removeGrouping(identifier: number): Observable<number> {
+    return Observable.of(identifier);
+  }
+
+  fetchEquity(identifier: number): Observable<Equity> {
+    let toReturn = _.cloneDeep(sampleEquity);
+    toReturn.identifier = identifier;
+    return Observable.of(toReturn);
+  }
+
+  createEquity(equity: Equity): Observable<Equity> {
+    return Observable.of(equity);
+  }
+
+  updateEquity(equity: Equity): Observable<Equity> {
+    return Observable.of(equity);
+  }
+
+  removeEquity(identifier: number): Observable<number> {
     return Observable.of(identifier);
   }
 

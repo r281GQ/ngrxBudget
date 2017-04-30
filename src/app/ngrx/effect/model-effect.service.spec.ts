@@ -4,14 +4,14 @@ import {ModelEffectService} from "./model-effect.service";
 import {EffectsRunner, EffectsTestingModule} from "@ngrx/effects/testing";
 import {RepoService} from "../../repo/repo.service";
 import {
-  CREATE_ACCOUNT,
+  CREATE_ACCOUNT, CREATE_EQUITY,
   CREATE_GROUPING,
   CREATE_TRANSACTION,
   FETCH_ACCOUNT,
   FETCH_ALL,
   FETCH_EQUITY,
   UPDATE_ACCOUNT,
-  UPDATE_ALL,
+  UPDATE_ALL, UPDATE_EQUITY,
   UPDATE_GROUPING
 } from "../action/action.types";
 import {Action} from "@ngrx/store";
@@ -26,7 +26,8 @@ import {
 import {PersistTransaction, RefreshTransaction, RemoveTransaction} from "../action/model-actions/transaction.actions";
 import {FetchAccount, PersistAccount, RefreshAccount, RemoveAccount} from "../action/model-actions/account.actions";
 import {RepoMock} from "./repo-mock";
-import {sampleAccount, sampleGrouping, sampleTransaction} from "./test.constant";
+import {sampleAccount, sampleEquity, sampleGrouping, sampleTransaction} from "./test.constant";
+import {FetchEquity, PersistEquity, RefreshEquity, RemoveEquity} from "../action/model-actions/equity.actions";
 
 
 describe('ModelEffectService', () => {
@@ -37,6 +38,7 @@ describe('ModelEffectService', () => {
   let account;
   let grouping;
   let transaction;
+  let equity;
 
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
@@ -63,13 +65,14 @@ describe('ModelEffectService', () => {
     account = sampleAccount;
     grouping = sampleGrouping;
     transaction = sampleTransaction;
+    equity = sampleEquity;
   });
 
   it('fetchAccount => updateAccount', done => {
     account.identifier = 1;
 
     runner.queue(new FetchAccount(1));
-    modelEffectService.accountFetch$.subscribe((effect) => {
+    modelEffectService.fetchAccount$.subscribe((effect) => {
       expect(effect.type).toBe(UPDATE_ACCOUNT);
       done();
     });
@@ -77,7 +80,7 @@ describe('ModelEffectService', () => {
 
   it('persistAccount => createAccount', done => {
     runner.queue(new PersistAccount(account));
-    modelEffectService.accountPersist$.subscribe((effect) => {
+    modelEffectService.persistAccount$.subscribe((effect) => {
       expect(effect.payload.identifier).toBeDefined();
       expect(effect.type).toBe(CREATE_ACCOUNT);
       done();
@@ -88,7 +91,7 @@ describe('ModelEffectService', () => {
     account.identifier = 1;
 
     runner.queue(new RefreshAccount(account));
-    modelEffectService.accountRefresh$.subscribe((effect) => {
+    modelEffectService.refreshAccount$.subscribe((effect) => {
       expect(effect.payload.identifier).toBeDefined();
       expect(effect.type).toBe(UPDATE_ACCOUNT);
       done();
@@ -199,6 +202,44 @@ describe('ModelEffectService', () => {
     modelEffectService.groupingRefresh$.subscribe(effect => {
       expect(effect.type).toBe(UPDATE_GROUPING);
       expect(effect.payload.name).toBe(grouping.name);
+      done();
+    });
+  });
+
+  it('fetchEquity => updateEquity', done => {
+    runner.queue(new FetchEquity(1));
+
+    modelEffectService.fetchEquity$.subscribe(effect => {
+      expect(effect.type).toBe(UPDATE_EQUITY);
+      done();
+    });
+  });
+
+  it('persistEquity => createEquity', done => {
+    runner.queue(new PersistEquity(equity));
+
+    modelEffectService.persistEquity$.subscribe(effect => {
+      expect(effect.type).toBe(CREATE_EQUITY);
+      expect(effect.payload.name).toBe(equity.name);
+      done();
+    });
+  });
+
+  it('refreshEquity => updateEquity', done => {
+    runner.queue(new RefreshEquity(equity));
+
+    modelEffectService.refreshEquity$.subscribe(effect => {
+      expect(effect.type).toBe(UPDATE_EQUITY);
+      expect(effect.payload.name).toBe(equity.name);
+      done();
+    });
+  });
+
+  it('removeEquity => fetchAll', done => {
+    runner.queue(new RemoveEquity(1));
+
+    modelEffectService.removeEquity$.subscribe(effect => {
+      expect(effect.type).toBe(FETCH_ALL);
       done();
     });
   });

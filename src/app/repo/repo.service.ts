@@ -69,6 +69,22 @@ export class RepoService {
     return null;
   }
 
+  fetchEquity(identifier: number): Observable<Equity> {
+    return null;
+  }
+
+  createEquity(equity: Equity): Observable<Equity> {
+    return null;
+  }
+
+  updateEquity(equity: Equity): Observable<Equity> {
+    return null;
+  }
+
+  removeEquity(identifier: number): Observable<number> {
+    return null;
+  }
+
   fetchAll(): Observable<any> {
     return null;
   }

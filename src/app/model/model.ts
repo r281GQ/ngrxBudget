@@ -7,6 +7,12 @@ export interface Account {
 }
 
 export interface Budget {
+  identifier: number,
+  name: string,
+  defaultAllowance: number,
+  currency: string,
+  transactions?: number [],
+  budgetPeriods?: number []
 }
 
 export interface BudgetPeriod {

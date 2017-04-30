@@ -1,4 +1,4 @@
-import {Grouping, Account, Transaction} from "../../model/model";
+import {Grouping, Account, Transaction, Equity} from "../../model/model";
 
 const sampleTransaction: Transaction = {
   name: 'salary',
@@ -13,5 +13,6 @@ const sampleTransaction: Transaction = {
 };
 const sampleGrouping: Grouping = {identifier: undefined, type: 'Expense', name: 'Rent'};
 const sampleAccount: Account = {identifier: undefined, currency: 'GBP', balance: 100, name: 'Main'};
+const sampleEquity: Equity = {identifier: undefined, currency: 'GBP', balance: 200, type: 'liability', name: 'loan'};
 
-export {sampleAccount, sampleTransaction, sampleGrouping};
+export {sampleAccount, sampleTransaction, sampleGrouping, sampleEquity};

@@ -1,9 +1,13 @@
 import {Action} from "@ngrx/store";
-import {CREATE_ACCOUNT, CREATE_TRANSACTION, UPDATE_ACCOUNT, UPDATE_ALL, CREATE_GROUPING, UPDATE_GROUPING} from "../action/action.types";
+import {
+  CREATE_ACCOUNT, CREATE_TRANSACTION, UPDATE_ACCOUNT, UPDATE_ALL, CREATE_GROUPING, UPDATE_GROUPING,
+  CREATE_EQUITY, UPDATE_EQUITY
+} from "../action/action.types";
 import {handleAccountCreate, handleAccountUpdate} from "./model-reducer/account.reducer";
 import {handleTransactionCreation} from "./model-reducer/transaction.reducer";
 import {handleUpdateAll} from "app/ngrx/reducer/model-reducer/misc-handler";
 import {handleGroupingCreate, handleGroupingUpdate} from "./model-reducer/grouping.reducer";
+import {handleEquityCreate, handleEquityUpdate} from "./model-reducer/equity.reducer";
 
 const model = (state, action: Action) => {
   switch (action.type) {
@@ -19,6 +23,10 @@ const model = (state, action: Action) => {
       return handleGroupingCreate(state, action);
     case UPDATE_GROUPING:
       return handleGroupingUpdate(state, action);
+    case CREATE_EQUITY:
+      return handleEquityCreate(state, action);
+    case UPDATE_EQUITY:
+      return handleEquityUpdate(state, action);
     default:
       return state;
   }

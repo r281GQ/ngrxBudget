@@ -3,15 +3,15 @@ import {RepoService} from "../../repo/repo.service";
 import {Actions, Effect} from "@ngrx/effects";
 import {
   FETCH_ACCOUNT,
-  FETCH_ALL,
+  FETCH_ALL, FETCH_EQUITY,
   FETCH_GROUPING,
-  PERSIST_ACCOUNT,
+  PERSIST_ACCOUNT, PERSIST_EQUITY,
   PERSIST_GROUPING,
   PERSIST_TRANSACTION,
-  REFRESH_ACCOUNT,
+  REFRESH_ACCOUNT, REFRESH_EQUITY,
   REFRESH_GROUPING,
   REFRESH_TRANSACTION,
-  REMOVE_ACCOUNT,
+  REMOVE_ACCOUNT, REMOVE_EQUITY,
   REMOVE_GROUPING,
   REMOVE_TRANSACTION
 } from "../action/action.types";
@@ -27,7 +27,7 @@ import {Observable} from "rxjs/Observable";
 import {CreateGrouping, UpdateGrouping} from "../action/model-actions/grouping.actions";
 import {CreateAccount, FetchAccount, UpdateAccount} from "../action/model-actions/account.actions";
 import {Action} from "@ngrx/store";
-import {FetchEquity} from "../action/model-actions/equity.actions";
+import {CreateEquity, FetchEquity, UpdateEquity} from "../action/model-actions/equity.actions";
 import {FetchAll, UpdateAll} from "../action/model-actions/misc.actions";
 var uuid = require('uuid/v4');
 
@@ -47,12 +47,11 @@ export class ModelEffectService {
     .mergeMap(transaction => {
       let array: Action [] = [];
 
-      array.push(new CreateTransaction(transaction));
-      array.push(new FetchAccount(transaction.account));
-
       if (transaction.equity !== undefined)
         array.push(new FetchEquity(transaction.equity));
 
+      array.push(new FetchAccount(transaction.account));
+      array.push(new CreateTransaction(transaction));
       return Observable.from(array);
     });
 
@@ -97,7 +96,7 @@ export class ModelEffectService {
     .map(() => new FetchAll());
 
   @Effect()
-  accountFetch$ = this.actions$
+  fetchAccount$ = this.actions$
     .ofType(FETCH_ACCOUNT)
     .switchMap((action) => this.repoService.fetchAccount(action.payload))
     .map(account => new UpdateAccount(account));
@@ -109,7 +108,7 @@ export class ModelEffectService {
     .map(() => new FetchAll());
 
   @Effect()
-  accountPersist$ = this.actions$
+  persistAccount$ = this.actions$
     .ofType(PERSIST_ACCOUNT)
     .map(action => {
       action.payload.identifier = uuid();
@@ -119,10 +118,38 @@ export class ModelEffectService {
     .map(account => new CreateAccount(account));
 
   @Effect()
-  accountRefresh$ = this.actions$
+  refreshAccount$ = this.actions$
     .ofType(REFRESH_ACCOUNT)
     .switchMap((action) => this.repoService.updateAccount(action.payload))
     .map(account => new UpdateAccount(account));
+
+  @Effect()
+  fetchEquity$ = this.actions$
+    .ofType(FETCH_EQUITY)
+    .switchMap(action => this.repoService.fetchEquity(action.payload))
+    .map(equity => new UpdateEquity(equity));
+
+  @Effect()
+  persistEquity$ = this.actions$
+    .ofType(PERSIST_EQUITY)
+    .map(action => {
+      action.payload.identifier = uuid();
+      return action;
+    })
+    .switchMap(action => this.repoService.createEquity(action.payload))
+    .map(equity => new CreateEquity(equity));
+
+  @Effect()
+  refreshEquity$ = this.actions$
+    .ofType(REFRESH_EQUITY)
+    .switchMap(action => this.repoService.updateEquity(action.payload))
+    .map(equity => new UpdateEquity(equity));
+
+  @Effect()
+  removeEquity$ = this.actions$
+    .ofType(REMOVE_EQUITY)
+    .switchMap(action => this.repoService.removeEquity(action.payload))
+    .map(() => new FetchAll());
 
   @Effect()
   fetchAll$ = this.actions$
