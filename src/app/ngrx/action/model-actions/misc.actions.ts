@@ -1,5 +1,5 @@
 import {Action} from "@ngrx/store";
-import {UPDATE_ALL, FETCH_ALL} from "../../reducer/reducer";
+import {UPDATE_ALL, FETCH_ALL} from "../action.types";
 import {RawDataBase} from "../../../repo/repo.service";
 
 export class UpdateAll implements Action {

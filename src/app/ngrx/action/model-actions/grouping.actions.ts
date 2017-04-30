@@ -2,7 +2,7 @@ import {Action} from "@ngrx/store";
 import {
   CREATE_GROUPING, FETCH_GROUPING, PERSIST_GROUPING, REFRESH_GROUPING, REMOVE_GROUPING,
   UPDATE_GROUPING
-} from "../../reducer/reducer";
+} from "../action.types";
 import {Grouping} from "../../../model/model";
 
 export class FetchGrouping implements Action {

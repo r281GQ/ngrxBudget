@@ -1,9 +1,5 @@
 import {Action} from "@ngrx/store";
-import {UPDATE_DATE, UPDATE_FILTER, UPDATE_ID, UPDATE_QUERY} from "../reducer/reducer";
-/**
- * Created by veghe on 23/04/2017.
- */
-
+import {UPDATE_DATE, UPDATE_FILTER, UPDATE_ID, UPDATE_QUERY} from "../../ngrx/action/action.types";
 
 export class QueryUpdate implements Action {
   readonly type: string;
@@ -14,7 +10,6 @@ export class QueryUpdate implements Action {
     this.payload = payload;
   }
 }
-
 
 export class DateUpdate implements Action {
   readonly type: string;

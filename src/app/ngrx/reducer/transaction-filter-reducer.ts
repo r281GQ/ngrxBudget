@@ -1,9 +1,11 @@
 import {Action} from "@ngrx/store";
 import * as _ from 'lodash';
-import {UPDATE_DATE, UPDATE_QUERY, UPDATE_FILTER, UPDATE_ID} from "./reducer";
+import {
+  UPDATE_DATE,
+  UPDATE_FILTER, UPDATE_QUERY, UPDATE_ID
+} from "../action/action.types";
 
-
-export const transactionFilter = (state, action: Action) => {
+const transactionFilter = (state, action: Action) => {
   switch (action.type) {
     case UPDATE_QUERY:
       return handleQueryUpdate(state, action);
@@ -18,27 +20,28 @@ export const transactionFilter = (state, action: Action) => {
   }
 }
 
-
-function handleQueryUpdate(state, action: Action) {
+const handleQueryUpdate = (state, action: Action) => {
   let newState = _.cloneDeep(state);
   newState.query = action.payload;
   return newState;
 }
 
-function handleDateUpdate(state, action: Action) {
+const handleDateUpdate = (state, action: Action) => {
   let newState = _.cloneDeep(state);
   newState.date = action.payload;
   return newState;
 }
 
-function handleFilterByUpdate(state, action: Action) {
+const handleFilterByUpdate = (state, action: Action) => {
   let newState = _.cloneDeep(state);
   newState.filterBy = action.payload;
   return newState;
 }
 
-function handleIdUpdate(state, action: Action) {
+const handleIdUpdate = (state, action: Action) => {
   let newState = _.cloneDeep(state);
   newState.id = action.payload;
   return newState;
 }
+
+export {transactionFilter};

@@ -8,7 +8,7 @@ import {combineReducers, StoreModule} from "@ngrx/store";
 import {model, transactionFilter, reducer} from "./ngrx/reducer/reducer";
 import {INITIAL_STATE} from "./ngrx/store/application-state";
 import {reduce} from "rxjs/operator/reduce";
-import {TransactionEffectService} from "./ngrx/effect/transaction-effect.service";
+import {ModelEffectService} from "./ngrx/effect/model-effect.service";
 import {RepoService} from "./repo/repo.service";
 import {EffectsModule} from "@ngrx/effects";
 
@@ -22,10 +22,10 @@ import {EffectsModule} from "@ngrx/effects";
     HttpModule,
     ReactiveFormsModule,
     StoreModule.provideStore(reducer, INITIAL_STATE),
-    EffectsModule.run(TransactionEffectService)
+    EffectsModule.run(ModelEffectService)
   ],
   providers: [
-    TransactionEffectService,
+    ModelEffectService,
     RepoService
   ],
   bootstrap: [AppComponent]

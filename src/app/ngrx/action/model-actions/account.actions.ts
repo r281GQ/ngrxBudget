@@ -1,10 +1,12 @@
 import {Action} from "@ngrx/store";
 import {
-  CREATE_ACCOUNT, DELETE_ACCOUNT, FETCH_ACCOUNT, FETCH_ACCOUNTS_BY_USER, GET_ACCOUNT, PERSIST_ACCOUNT, REFRESH_ACCOUNT,
+  CREATE_ACCOUNT,
+  FETCH_ACCOUNT,
+  PERSIST_ACCOUNT,
+  REFRESH_ACCOUNT,
   REMOVE_ACCOUNT,
-  UPDATE_ACCOUNT,
-  GET_ACCOUNTS_BY_USER
-} from "../../reducer/reducer";
+  UPDATE_ACCOUNT
+} from "../action.types";
 import {Account} from "../../../model/model";
 
 export class CreateAccount implements Action {
@@ -25,18 +27,6 @@ export class UpdateAccount implements Action {
   }
 }
 
-export class DeleteAccount implements Action {
-  readonly type: string = DELETE_ACCOUNT;
-  payload: number;
-
-  constructor(payload: number) {
-    this.payload = payload;
-  }
-}
-
-export class GetAccountsByUser implements Action {
-  readonly type: string = GET_ACCOUNTS_BY_USER;
-}
 
 export class PersistAccount implements Action {
   readonly type: string = PERSIST_ACCOUNT;
@@ -56,15 +46,6 @@ export class RefreshAccount implements Action {
   }
 }
 
-export class RemoveAccount implements Action {
-  readonly type: string = REMOVE_ACCOUNT;
-  payload: number;
-
-  constructor(payload: number) {
-    this.payload = payload;
-  }
-}
-
 export class FetchAccount implements Action {
   readonly type: string = FETCH_ACCOUNT;
   payload: number;
@@ -74,6 +55,11 @@ export class FetchAccount implements Action {
   }
 }
 
-export class FetchAccountsByUser implements Action {
-  readonly type: string = FETCH_ACCOUNTS_BY_USER;
+export class RemoveAccount implements Action {
+  readonly type: string = REMOVE_ACCOUNT;
+  payload: number;
+
+  constructor(payload: number) {
+    this.payload = payload;
+  }
 }
