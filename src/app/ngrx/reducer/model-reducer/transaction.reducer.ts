@@ -3,18 +3,19 @@ import * as _ from 'lodash';
 
 const handleTransactionCreation = (state, action: Action) => {
   let newState = _.cloneDeep(state);
+  let transaction = _.cloneDeep(action.payload);
 
-  newState.transactions[action.payload.identifier] = action.payload;
-  newState.accounts[action.payload.account].transactions.push(action.payload.identifier);
-  newState.groupings[action.payload.grouping].transactions.push(action.payload.identifier);
+  newState.transactions[transaction.identifier] = transaction;
+  newState.accounts[transaction.account].transactions.push(transaction.identifier);
+  newState.groupings[transaction.grouping].transactions.push(transaction.identifier);
 
-  if (!_.isUndefined(action.payload.budget)) {
-    newState.budgets[action.payload.budget].transactions.push(action.payload.identifier);
-    newState.budgetPeriods[action.payload.budgetPeriod].transactions.push(action.payload.identifier);
+  if (!_.isUndefined(transaction.budget)) {
+    newState.budgets[transaction.budget].transactions.push(transaction.identifier);
+    newState.budgetPeriods[transaction.budgetPeriod].transactions.push(transaction.identifier);
   }
 
-  if (!_.isUndefined(action.payload.equity))
-    newState.equities[action.payload.equity].transactions.push(action.payload.identifier);
+  if (!_.isUndefined(transaction.equity))
+    newState.equities[transaction.equity].transactions.push(transaction.identifier);
 
   return newState;
 }

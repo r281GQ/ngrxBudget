@@ -3,14 +3,14 @@ import * as _ from 'lodash';
 
 const handleGroupingUpdate = (state: any, action: Action) => {
   let newState = _.cloneDeep(state);
-  let groupingToUpdate = action.payload;
-  newState.groupings[groupingToUpdate.identifier].name = groupingToUpdate.name;
+  let grouping = _.cloneDeep(action.payload);
+  newState.groupings[grouping.identifier].name = grouping.name;
   return newState;
 }
 const handleGroupingCreate = (state: any, action: Action) => {
   let newState = _.cloneDeep(state);
-  let groupingToUpdate = action.payload;
-  newState.groupings[groupingToUpdate.identifier] = groupingToUpdate;
+  let grouping = action.payload;
+  newState.groupings[grouping.identifier] = grouping;
   return newState;
 }
 

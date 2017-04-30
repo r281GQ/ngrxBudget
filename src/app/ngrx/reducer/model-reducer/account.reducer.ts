@@ -3,13 +3,15 @@ import * as _ from 'lodash';
 
 const handleAccountCreate = (state, action: Action) => {
   let newState = _.cloneDeep(state);
-  newState.accounts[action.payload.identifier] = action.payload;
+  let account = _.cloneDeep(action.payload);
+  newState.accounts[action.payload.identifier] = account;
   return newState;
 }
 
 const handleAccountUpdate = (state, action: Action) => {
   let newState = _.cloneDeep(state);
-  newState.accounts[action.payload.identifier].name = action.payload.name;
+  let account = _.cloneDeep(action.payload);
+  newState.accounts[action.payload.identifier].name = account.name;
   return newState;
 }
 

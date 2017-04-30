@@ -16,8 +16,6 @@ import {
 } from "../action/action.types";
 import {Action} from "@ngrx/store";
 import * as _ from "lodash";
-import {Account, Grouping, Transaction} from "../../model/model";
-import {Observable} from "rxjs/Observable";
 import {FetchAll} from "../action/model-actions/misc.actions";
 import {
   FetchGrouping,
@@ -26,12 +24,20 @@ import {
   RemoveGrouping
 } from "../action/model-actions/grouping.actions";
 import {PersistTransaction, RefreshTransaction, RemoveTransaction} from "../action/model-actions/transaction.actions";
-import {PersistAccount, RefreshAccount, RemoveAccount} from "../action/model-actions/account.actions";
+import {FetchAccount, PersistAccount, RefreshAccount, RemoveAccount} from "../action/model-actions/account.actions";
 import {RepoMock} from "./repo-mock";
 import {sampleAccount, sampleGrouping, sampleTransaction} from "./test.constant";
 
 
 describe('ModelEffectService', () => {
+  let runner: EffectsRunner;
+  let modelEffectService: ModelEffectService;
+  let repoMock: RepoMock;
+
+  let account;
+  let grouping;
+  let transaction;
+
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       EffectsTestingModule
@@ -42,147 +48,95 @@ describe('ModelEffectService', () => {
     ]
   }));
 
-  let runner: EffectsRunner;
-  let transactionEffectService: ModelEffectService;
-  let repo: RepoMock;
 
   beforeEach(inject([
       EffectsRunner, ModelEffectService, RepoService
     ],
     (_runner, _transactionEffectService, _repoMock) => {
       runner = _runner;
-      transactionEffectService = _transactionEffectService;
-      repo = _repoMock;
+      modelEffectService = _transactionEffectService;
+      repoMock = _repoMock;
     }
   ));
 
-  it('should fetch grouping from the backend and run UPDATE_GROUPING with the data provided as a payload', done => {
-    runner.queue(new FetchGrouping(1));
+  beforeEach(() => {
+    account = sampleAccount;
+    grouping = sampleGrouping;
+    transaction = sampleTransaction;
+  });
 
-    transactionEffectService.groupingFetch$.subscribe(effects => {
-      expect(effects.type).toBe(UPDATE_GROUPING);
-      expect(effects.payload.type).toBe('Expense');
-      expect(effects.payload.name).toBe('Rent');
-      expect(effects.payload.identifier).toBe(1);
+  it('fetchAccount => updateAccount', done => {
+    account.identifier = 1;
+
+    runner.queue(new FetchAccount(1));
+    modelEffectService.accountFetch$.subscribe((effect) => {
+      expect(effect.type).toBe(UPDATE_ACCOUNT);
       done();
     });
   });
 
-  it('should run updateGrouping with the corresponding gruping after returning from the backend', done => {
-
-    runner.queue(new RefreshGrouping(_.cloneDeep(sampleGrouping)));
-
-    transactionEffectService.groupingRefresh$.subscribe(effect => {
-
-      expect(effect.type).toBe(UPDATE_GROUPING);
-      expect(effect.payload.name).toBe(sampleGrouping.name);
-
-      done();
-    });
-
-  });
-
-  it('should reger db on tran removal', done => {
-
-    runner.queue(new RemoveTransaction(1));
-
-    transactionEffectService.removeTransaction$.subscribe(effect => {
-      done();
-    });
-
-  });
-
-  it('should regenerate db when removegrouping is called', done => {
-
-    let removeGFunction = spyOn(repo, 'removeGrouping').and.returnValue(Observable.of(1));
-
-    runner.queue(new RemoveGrouping(1));
-
-    transactionEffectService.groupingRemoval$.subscribe(effect => {
-
-      expect(removeGFunction).toHaveBeenCalledWith(1);
-
-      expect(effect.type).toBe(FETCH_ALL);
-
-      done();
-    });
-
-  });
-
-  it('should createGrouping after finished persistinit into the db', done => {
-
-    let gr = _.cloneDeep(sampleGrouping);
-
-    gr.identifier = undefined;
-
-    runner.queue(new PersistGrouping(gr));
-
-    transactionEffectService.groupingPersist$.subscribe(effect => {
-
+  it('persistAccount => createAccount', done => {
+    runner.queue(new PersistAccount(account));
+    modelEffectService.accountPersist$.subscribe((effect) => {
       expect(effect.payload.identifier).toBeDefined();
-      expect(effect.type).toBe(CREATE_GROUPING);
-
+      expect(effect.type).toBe(CREATE_ACCOUNT);
       done();
     });
-
   });
 
+  it('refreshAccount => updateAccount', done => {
+    account.identifier = 1;
 
-  it('should return two effect containing the expected payload after dispatching PERSIST_TRANSACTION without budgets and equities', done => {
-    runner.queue(new PersistTransaction(sampleTransaction));
+    runner.queue(new RefreshAccount(account));
+    modelEffectService.accountRefresh$.subscribe((effect) => {
+      expect(effect.payload.identifier).toBeDefined();
+      expect(effect.type).toBe(UPDATE_ACCOUNT);
+      done();
+    });
+  });
+
+  it('removeAccount => fetchAll', done => {
+    runner.queue(new RemoveAccount(1));
+
+    modelEffectService.removeAccount$.subscribe((effect) => {
+      expect(effect.type).toBe(FETCH_ALL);
+      done();
+    });
+  });
+
+  it('persistTransaction => createTransaction, fetchAccount', done => {
+    runner.queue(new PersistTransaction(transaction));
 
     let container: Action [] = [];
 
-
-    transactionEffectService.persistTransaction$.subscribe(effect => {
-      container.push(effect);
-
-
-
-    },null,()=> console.log('completed'));
-
-    setTimeout(()=> {
-      let first = _.find(container, (action) => action.type === CREATE_TRANSACTION);
-        let second = _.find(container, (action) => action.type === FETCH_ACCOUNT);
-        expect(_.size(container)).toBe(2);
-
-        expect(first.type).toBe(CREATE_TRANSACTION);
-        expect(first.payload.name).toBe(sampleTransaction.name);
-        expect(first.payload.identifier).toBeDefined();
-        expect(second.payload).toBe(3);
-        done();
-    }, 300);
-
-    // waitsFor(() => _.size(container) === 2);
-
-    // runs(()=>{
-    //   let first = _.find(container, (action) => action.type === CREATE_TRANSACTION);
-    //   let second = _.find(container, (action) => action.type === FETCH_ACCOUNT);
-    //   expect(_.size(container)).toBe(2);
-    //
-    //   expect(first.type).toBe(CREATE_TRANSACTION);
-    //   expect(first.payload.name).toBe(sampleTransaction.name);
-    //   expect(first.payload.identifier).toBeDefined();
-    //   expect(second.payload).toBe(3);
-    //   done();
-    // });
-
-  });
-
-  it('should return three effect containing the expected payload after dispatching PERSIST_TRANSACTION without budgets but with equity', done => {
-    let modifiedTransaction = _.cloneDeep(sampleTransaction);
-
-    modifiedTransaction.equity = 5;
-
-
-    runner.queue(new PersistTransaction(modifiedTransaction));
-    let container: Action [] = [];
-
-    transactionEffectService.persistTransaction$.subscribe(effect => {
+    modelEffectService.persistTransaction$.subscribe(effect => {
       container.push(effect);
     });
 
-    setTimeout(()=> {
+    setTimeout(() => {
+      let first = _.find(container, (action) => action.type === CREATE_TRANSACTION);
+      let second = _.find(container, (action) => action.type === FETCH_ACCOUNT);
+      expect(_.size(container)).toBe(2);
+
+      expect(first.type).toBe(CREATE_TRANSACTION);
+      expect(first.payload.name).toBe(transaction.name);
+      expect(first.payload.identifier).toBeDefined();
+      expect(second.payload).toBe(3);
+      done();
+    }, 100);
+  });
+
+  it('persistTransaction => createTransaction, fetchAccount, fetchEquity', done => {
+    transaction.equity = 5;
+
+    runner.queue(new PersistTransaction(transaction));
+    let container: Action [] = [];
+
+    modelEffectService.persistTransaction$.subscribe(effect => {
+      container.push(effect);
+    });
+
+    setTimeout(() => {
       let first = _.find(container, (action) => action.type === CREATE_TRANSACTION);
       let second = _.find(container, (action) => action.type === FETCH_ACCOUNT);
       let third = _.find(container, (action) => action.type === FETCH_EQUITY);
@@ -194,73 +148,74 @@ describe('ModelEffectService', () => {
       expect(second.payload).toBe(3);
       expect(first.payload.name).toBe(sampleTransaction.name);
       done();
-    }, 300);
-
-
+    }, 100);
   });
 
+  it('refreshTransaction => fetchAll', done => {
+    runner.queue(new RefreshTransaction(transaction));
 
-  it('should return an CREATE_ACCOUNT action with proper payload after dispatching PERSIST_ACCOUNT', done => {
-    runner.queue(new PersistAccount(sampleAccount));
-    transactionEffectService.accountPersist$.subscribe((effect) => {
-      expect(effect.payload.identifier).toBeDefined();
-      expect(effect.type).toBe(CREATE_ACCOUNT);
-      done();
-    });
-  });
-
-  it('should return an UPDATE_ACCOUNT action with proper payload after dispatching REFRESH_ACCOUNT', done => {
-    let accountToBePassed = _.cloneDeep(sampleAccount);
-    accountToBePassed.identifier = 1;
-
-    runner.queue(new RefreshAccount(accountToBePassed));
-    transactionEffectService.accountRefresh$.subscribe((effect) => {
-      expect(effect.payload.identifier).toBeDefined();
-      expect(effect.type).toBe(UPDATE_ACCOUNT);
-      done();
-    });
-  });
-
-  it('should invoke the complete regeneration of the data state when dispatching REFRESH_TRANSACTION', done => {
-    let transactionToBePassed = _.cloneDeep(sampleTransaction);
-
-    runner.queue(new RefreshTransaction(transactionToBePassed));
-
-    transactionEffectService.refreshTransaction$.subscribe((effect) => {
+    modelEffectService.refreshTransaction$.subscribe((effect) => {
       expect(effect.type).toBe(FETCH_ALL);
-
       done();
     });
   });
 
-  // it('should return an GET_ACCOUNTS_BY_USER action with proper payload after dispatching FETCH_ACCOUNTS_BY_USER', () => {
-  //   runner.queue({type: FETCH_ACCOUNTS_BY_USER});
-  //   transactionEffectService.accountsFetchByUser$.subscribe((effect) => {
-  //     expect(effect.type).toBe(GET_ACCOUNTS_BY_USER);
-  //   });
-  // });
-  //
-  // it('should return an GET_ACCOUNTS_BY_USER action with proper payload after dispatching FETCH_ACCOUNTS_BY_USER', () => {
-  //   runner.queue({type: FETCH_ACCOUNTS_BY_USER});
-  //   transactionEffectService.accountsFetchByUser$.subscribe((effect) => {
-  //     expect(effect.type).toBe(GET_ACCOUNTS_BY_USER);
-  //   });
-  // });
+  it('removeTransaction => fetchAll', done => {
+    runner.queue(new RemoveTransaction(1));
 
-  it('should get the whole DB', (done) => {
+    modelEffectService.removeTransaction$.subscribe(effect => {
+      expect(effect.type).toBe(FETCH_ALL);
+      done();
+    });
+  });
+
+  it('fetchGrouping => updateGrouping', done => {
+    runner.queue(new FetchGrouping(1));
+
+    modelEffectService.groupingFetch$.subscribe(effects => {
+      expect(effects.type).toBe(UPDATE_GROUPING);
+      expect(effects.payload.type).toBe('Expense');
+      expect(effects.payload.name).toBe('Rent');
+      expect(effects.payload.identifier).toBe(1);
+      done();
+    });
+  });
+
+  it('persistGrouping => updateGrouping', done => {
+    grouping.identifier = undefined;
+
+    runner.queue(new PersistGrouping(grouping));
+
+    modelEffectService.groupingPersist$.subscribe(effect => {
+      expect(effect.payload.identifier).toBeDefined();
+      expect(effect.type).toBe(CREATE_GROUPING);
+      done();
+    });
+  });
+
+  it('refreshGrouping => updateGrouping', done => {
+    runner.queue(new RefreshGrouping(grouping));
+
+    modelEffectService.groupingRefresh$.subscribe(effect => {
+      expect(effect.type).toBe(UPDATE_GROUPING);
+      expect(effect.payload.name).toBe(grouping.name);
+      done();
+    });
+  });
+
+  it('fetchAll => updateAll', (done) => {
     runner.queue(new FetchAll());
 
-    transactionEffectService.fetchAll$.subscribe((effect) => {
-      expect(effect.payload.transactions).toContain(sampleTransaction);
+    modelEffectService.fetchAll$.subscribe((effect) => {
       expect(effect.type).toBe(UPDATE_ALL);
       done();
     });
   });
 
-  it('should invoke the complete regeneration of the data state when a REMOVE_ACCOUNT action is dispatched', done => {
-    runner.queue(new RemoveAccount(1));
+  it('removeGrouping => fetchAll', done => {
+    runner.queue(new RemoveGrouping(1));
 
-    transactionEffectService.removeAccount$.subscribe((effect) => {
+    modelEffectService.groupingRemoval$.subscribe(effect => {
       expect(effect.type).toBe(FETCH_ALL);
       done();
     });

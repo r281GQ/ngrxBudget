@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
+import {Injectable} from "@angular/core";
 import {Account, Budget, BudgetPeriod, Equity, Grouping, Transaction} from "../model/model";
 import {Observable} from "rxjs/Observable";
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/empty';
+import "rxjs/add/observable/of";
+import "rxjs/add/observable/empty";
 import {Http} from "@angular/http";
 
 export interface RawDataBase {
@@ -20,29 +20,10 @@ export class RepoService {
   constructor(private http: Http) {
   }
 
-  createTransaction(transaction: Transaction): Observable<Transaction> {
-    return null;
-  }
-
-  fetchTransaction(identifier: number): Observable<Transaction> {
-    return null;
-  }
-
-  fetchGrouping(identifier: number): Observable<Grouping> {
-    return null;
-  }
-
   fetchAccount(identifier: number): Observable<Account> {
     return null;
   }
 
-  removeTransaction(identifier: number): Observable<number> {
-    return null;
-  }
-
-  removeAccount(identifier: number): Observable<number> {
-    return null;
-  }
 
   createAccount(account: Account): Observable<Account> {
     return null;
@@ -52,15 +33,31 @@ export class RepoService {
     return null;
   }
 
-  fetchAccountsByUser(): Observable<Account []> {
+  removeAccount(identifier: number): Observable<number> {
     return null;
   }
 
-  fetchAll(): Observable<any> {
+  createTransaction(transaction: Transaction): Observable<Transaction> {
     return null;
   }
 
-  updateTransaction(transaction: Transaction):Observable<Transaction> {
+  fetchTransaction(identifier: number): Observable<Transaction> {
+    return null;
+  }
+
+  updateTransaction(transaction: Transaction): Observable<Transaction> {
+    return null;
+  }
+
+  removeTransaction(identifier: number): Observable<number> {
+    return null;
+  }
+
+  fetchGrouping(identifier: number): Observable<Grouping> {
+    return null;
+  }
+
+  createGrouping(grouping: Grouping): Observable<Grouping> {
     return null;
   }
 
@@ -72,7 +69,7 @@ export class RepoService {
     return null;
   }
 
-  createGrouping(grouping: Grouping): Observable<Grouping> {
+  fetchAll(): Observable<any> {
     return null;
   }
 }

@@ -32,7 +32,7 @@ describe('modelReducers/misc', () => {
     }
   });
 
-  it('should recreate the whole model state', () => {
+  it('whole model state', () => {
     initState.groupings[89] = {transactions: [], type: 'Income', name: 'Spending money', identifier: 69};
 
     let modifiedState = model(initState, new UpdateAll(exampleDataBase));

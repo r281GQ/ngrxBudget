@@ -1,6 +1,3 @@
-/**
- * Created by veghe on 23/04/2017.
- */
 export interface Account {
   identifier: number,
   name: string,
@@ -9,11 +6,20 @@ export interface Account {
   transactions?: number []
 }
 
-export interface Budget {}
+export interface Budget {
+}
 
-export interface BudgetPeriod {}
+export interface BudgetPeriod {
+}
 
-export interface Equity {}
+export interface Equity {
+  identifier: number,
+  name: string,
+  balance: number,
+  currency: string,
+  type: string,
+  transactions?: number []
+}
 
 export interface Transaction {
   currency: string,
