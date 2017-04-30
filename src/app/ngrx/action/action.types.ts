@@ -3,6 +3,8 @@ export const UPDATE_DATE: string = 'updateDate';
 export const UPDATE_FILTER: string = 'updateFilter';
 export const UPDATE_ID: string = 'updateId';
 
+export const RESET: string = 'reset';
+
 export const CREATE_ACCOUNT: string = 'createAccount';
 export const UPDATE_ACCOUNT: string = 'updateAccount';
 
@@ -34,3 +36,13 @@ export const UPDATE_GROUPING: string = 'updateGrouping';
 
 export const FETCH_ALL: string = 'fetchAll';
 export const UPDATE_ALL: string = 'updateAll';
+
+export const WIPE: string = 'wipe';
+
+export const LOGIN_ATTEMPT: string = 'loginAttempt';
+export const LOGOUT_ATTEMPT: string = 'logoutAttempt';
+
+export const LOGIN_SUCCESS: string = 'loginSuccess';
+export const LOGIN_FAILED: string = 'loginFailed';
+export const LOGOUT: string = 'logout';
+

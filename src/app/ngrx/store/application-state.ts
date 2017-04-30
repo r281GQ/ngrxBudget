@@ -5,10 +5,12 @@
 export interface ApplicationState {
   auth: {
     user: {
-      id: number
+      identifier: number
       email: string;
       name: string;
-    }
+    },
+    authenticated: boolean,
+    token: string
   },
   transactionFilter: {
     query: string,
@@ -88,10 +90,12 @@ export interface ApplicationState {
 export const INITIAL_STATE: ApplicationState = {
   auth: {
     user: {
-      id: undefined,
+      identifier: undefined,
       email: undefined,
       name: undefined
-    }
+    },
+    authenticated: false,
+    token: undefined
   },
   transactionFilter: {
     query: '',

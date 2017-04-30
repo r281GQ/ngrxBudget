@@ -2,7 +2,7 @@ import {Action} from "@ngrx/store";
 import * as _ from 'lodash';
 import {
   UPDATE_DATE,
-  UPDATE_FILTER, UPDATE_QUERY, UPDATE_ID
+  UPDATE_FILTER, UPDATE_QUERY, UPDATE_ID, RESET
 } from "../action/action.types";
 
 const transactionFilter = (state, action: Action) => {
@@ -15,6 +15,8 @@ const transactionFilter = (state, action: Action) => {
       return handleFilterByUpdate(state, action);
     case UPDATE_ID:
       return handleIdUpdate(state, action);
+    case RESET:
+      return reset(state, action);
     default:
       return state;
   }
@@ -41,6 +43,17 @@ const handleFilterByUpdate = (state, action: Action) => {
 const handleIdUpdate = (state, action: Action) => {
   let newState = _.cloneDeep(state);
   newState.id = action.payload;
+  return newState;
+}
+
+const reset = (state, action) => {
+  let newState = _.cloneDeep(state);
+
+  newState.query = '';
+  newState.date = '';
+  newState.filterBy = '';
+  newState.id = 0;
+
   return newState;
 }
 

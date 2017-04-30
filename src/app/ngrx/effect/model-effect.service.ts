@@ -1,3 +1,5 @@
+declare var require: any;
+
 import {Injectable} from "@angular/core";
 import {RepoService} from "../../repo/repo.service";
 import {Actions, Effect} from "@ngrx/effects";
@@ -29,6 +31,7 @@ import {CreateAccount, FetchAccount, UpdateAccount} from "../action/model-action
 import {Action} from "@ngrx/store";
 import {CreateEquity, FetchEquity, UpdateEquity} from "../action/model-actions/equity.actions";
 import {FetchAll, UpdateAll} from "../action/model-actions/misc.actions";
+
 var uuid = require('uuid/v4');
 
 @Injectable()

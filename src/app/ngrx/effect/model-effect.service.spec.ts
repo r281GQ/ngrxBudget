@@ -54,9 +54,9 @@ describe('ModelEffectService', () => {
   beforeEach(inject([
       EffectsRunner, ModelEffectService, RepoService
     ],
-    (_runner, _transactionEffectService, _repoMock) => {
+    (_runner, _modelEffectService, _repoMock) => {
       runner = _runner;
-      modelEffectService = _transactionEffectService;
+      modelEffectService = _modelEffectService;
       repoMock = _repoMock;
     }
   ));

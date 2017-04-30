@@ -1,11 +1,11 @@
 import {Action} from "@ngrx/store";
 import {
   CREATE_ACCOUNT, CREATE_TRANSACTION, UPDATE_ACCOUNT, UPDATE_ALL, CREATE_GROUPING, UPDATE_GROUPING,
-  CREATE_EQUITY, UPDATE_EQUITY
+  CREATE_EQUITY, UPDATE_EQUITY, WIPE
 } from "../action/action.types";
 import {handleAccountCreate, handleAccountUpdate} from "./model-reducer/account.reducer";
 import {handleTransactionCreation} from "./model-reducer/transaction.reducer";
-import {handleUpdateAll} from "app/ngrx/reducer/model-reducer/misc-handler";
+import {handleUpdateAll, wipe} from "app/ngrx/reducer/model-reducer/misc-handler";
 import {handleGroupingCreate, handleGroupingUpdate} from "./model-reducer/grouping.reducer";
 import {handleEquityCreate, handleEquityUpdate} from "./model-reducer/equity.reducer";
 
@@ -27,6 +27,8 @@ const model = (state, action: Action) => {
       return handleEquityCreate(state, action);
     case UPDATE_EQUITY:
       return handleEquityUpdate(state, action);
+    case WIPE:
+      return wipe(state, action);
     default:
       return state;
   }

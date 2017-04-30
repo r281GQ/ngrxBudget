@@ -1,16 +1,17 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
+import {BrowserModule} from "@angular/platform-browser";
+import {NgModule} from "@angular/core";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {HttpModule} from "@angular/http";
 
-import {AppComponent} from './app.component';
-import {combineReducers, StoreModule} from "@ngrx/store";
-import {model, transactionFilter, reducer} from "./ngrx/reducer/reducer";
+import {AppComponent} from "./app.component";
+import {StoreModule} from "@ngrx/store";
+import {reducer} from "./ngrx/reducer/reducer";
 import {INITIAL_STATE} from "./ngrx/store/application-state";
-import {reduce} from "rxjs/operator/reduce";
 import {ModelEffectService} from "./ngrx/effect/model-effect.service";
 import {RepoService} from "./repo/repo.service";
 import {EffectsModule} from "@ngrx/effects";
+import {AuthEffectService} from "./ngrx/effect/auth-effect.service";
+import {AuthService} from "./repo/auth.service";
 
 @NgModule({
   declarations: [
@@ -22,11 +23,14 @@ import {EffectsModule} from "@ngrx/effects";
     HttpModule,
     ReactiveFormsModule,
     StoreModule.provideStore(reducer, INITIAL_STATE),
-    EffectsModule.run(ModelEffectService)
+    EffectsModule.run(ModelEffectService),
+    EffectsModule.run(AuthEffectService)
   ],
   providers: [
     ModelEffectService,
-    RepoService
+    AuthEffectService,
+    RepoService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

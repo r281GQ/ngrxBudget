@@ -1,5 +1,5 @@
 import {Action} from "@ngrx/store";
-import {UPDATE_DATE, UPDATE_FILTER, UPDATE_ID, UPDATE_QUERY} from "../../ngrx/action/action.types";
+import {RESET, UPDATE_DATE, UPDATE_FILTER, UPDATE_ID, UPDATE_QUERY} from "../../ngrx/action/action.types";
 
 export class QueryUpdate implements Action {
   readonly type: string;
@@ -39,4 +39,8 @@ export class IdUpdate implements Action {
     this.type = UPDATE_ID;
     this.payload = payload;
   }
+}
+
+export class Reset implements Action {
+  readonly type: string = RESET;
 }

@@ -45,6 +45,11 @@ const handleUpdateAll = (state: any, action: Action) => {
   return newState;
 }
 
+const wipe = (state, action) => {
+  let newState = resetValues(state);
+  return newState;
+};
+
 const resetValues = defaultState => {
   let newState = cloneDeep(defaultState);
 
@@ -58,4 +63,4 @@ const resetValues = defaultState => {
   return newState
 };
 
-export {handleUpdateAll};
+export {handleUpdateAll, wipe};
