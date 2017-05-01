@@ -16,6 +16,14 @@ export interface Budget {
 }
 
 export interface BudgetPeriod {
+  identifier: number,
+  name: string,
+  allowance: number,
+  balance: number,
+  currency: string,
+  period: string,
+  budget: number,
+  transactions?: number []
 }
 
 export interface Equity {

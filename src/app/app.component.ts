@@ -1,10 +1,11 @@
-import {Component} from '@angular/core';
+import {Component} from "@angular/core";
 import {Store} from "@ngrx/store";
 import {ApplicationState} from "./ngrx/store/application-state";
 import {QueryUpdate} from "./ngrx/action/transaction-filter.actions";
 import {CreateAccount} from "./ngrx/action/model-actions/account.actions";
 import {PersistTransaction} from "./ngrx/action/model-actions/transaction.actions";
-
+import {FETCH_BUDGET_PERIOD} from "./ngrx/action/action.types";
+import {go} from "@ngrx/router-store";
 
 
 @Component({
@@ -22,6 +23,10 @@ export class AppComponent {
     });
   }
 
+  budgetPeriodPersist(){
+    this.store.dispatch({type: FETCH_BUDGET_PERIOD});
+  }
+
   updateQuery(){
     this.store.dispatch(new QueryUpdate('salary'));
   }
@@ -37,6 +42,14 @@ export class AppComponent {
       creationDate: '12-03-2017',
       memo: ''
     }));
+  }
+
+  main(){
+    this.store.dispatch(go(['/main']));
+  }
+
+  about(){
+    this.store.dispatch(go(['/about']));
   }
 
   createAccount(){

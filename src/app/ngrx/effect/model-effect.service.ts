@@ -1,3 +1,4 @@
+import {CreateBudget, FetchBudget, UpdateBudget} from "../action/model-actions/budget.actions";
 declare var require: any;
 
 import {Injectable} from "@angular/core";
@@ -5,15 +6,15 @@ import {RepoService} from "../../repo/repo.service";
 import {Actions, Effect} from "@ngrx/effects";
 import {
   FETCH_ACCOUNT,
-  FETCH_ALL, FETCH_EQUITY,
+  FETCH_ALL, FETCH_BUDGET, FETCH_BUDGET_PERIOD, FETCH_EQUITY,
   FETCH_GROUPING,
-  PERSIST_ACCOUNT, PERSIST_EQUITY,
+  PERSIST_ACCOUNT, PERSIST_BUDGET, PERSIST_EQUITY,
   PERSIST_GROUPING,
   PERSIST_TRANSACTION,
-  REFRESH_ACCOUNT, REFRESH_EQUITY,
+  REFRESH_ACCOUNT, REFRESH_BUDGET, REFRESH_BUDGET_PERIOD, REFRESH_EQUITY,
   REFRESH_GROUPING,
   REFRESH_TRANSACTION,
-  REMOVE_ACCOUNT, REMOVE_EQUITY,
+  REMOVE_ACCOUNT, REMOVE_BUDGET, REMOVE_EQUITY,
   REMOVE_GROUPING,
   REMOVE_TRANSACTION
 } from "../action/action.types";
@@ -31,6 +32,7 @@ import {CreateAccount, FetchAccount, UpdateAccount} from "../action/model-action
 import {Action} from "@ngrx/store";
 import {CreateEquity, FetchEquity, UpdateEquity} from "../action/model-actions/equity.actions";
 import {FetchAll, UpdateAll} from "../action/model-actions/misc.actions";
+import {FetchBudgetPeriod, UpdateBudgetPeriod} from "../action/model-actions/budget-period.actions";
 
 var uuid = require('uuid/v4');
 
@@ -52,6 +54,11 @@ export class ModelEffectService {
 
       if (transaction.equity !== undefined)
         array.push(new FetchEquity(transaction.equity));
+
+      if(transaction.budget !== undefined){
+        array.push(new FetchBudget(transaction.budget));
+        array.push(new FetchBudgetPeriod(transaction.budgetPeriod));
+      }
 
       array.push(new FetchAccount(transaction.account));
       array.push(new CreateTransaction(transaction));
@@ -153,6 +160,46 @@ export class ModelEffectService {
     .ofType(REMOVE_EQUITY)
     .switchMap(action => this.repoService.removeEquity(action.payload))
     .map(() => new FetchAll());
+
+  @Effect()
+  fetchBudget$ = this.actions$
+    .ofType(FETCH_BUDGET)
+    .switchMap(action => this.repoService.fetchBudget(action.payload))
+    .map(budget => new UpdateBudget(budget));
+
+  @Effect()
+  persistBudget$ = this.actions$
+    .ofType(PERSIST_BUDGET)
+    .map(action => {
+      action.payload.identifier = uuid();
+      return action;
+    })
+    .switchMap(action => this.repoService.createBudget(action.payload))
+    .map(budget => new CreateBudget(budget));
+
+  @Effect()
+  refreshBudget$ = this.actions$
+    .ofType(REFRESH_BUDGET)
+    .switchMap(action => this.repoService.updateBudget(action.payload))
+    .map(budget => new UpdateBudget(budget));
+
+  @Effect()
+  removeBudget$ = this.actions$
+    .ofType(REMOVE_BUDGET)
+    .switchMap(action => this.repoService.removeBudget(action.payload))
+    .map(() => new FetchAll());
+
+  @Effect()
+  fetchBudgetPeriod$ = this.actions$
+    .ofType(FETCH_BUDGET_PERIOD)
+    .switchMap(action => this.repoService.fetchBudgetPeriod(action.payload))
+    .map(budgetPeriod => new UpdateBudgetPeriod(budgetPeriod));
+
+  @Effect()
+  refreshBudgetPeriod$ = this.actions$
+    .ofType(REFRESH_BUDGET_PERIOD)
+    .switchMap(action => this.repoService.updateBudgetPeriod(action.payload))
+    .map(budgetPeriod => new UpdateBudgetPeriod(budgetPeriod));
 
   @Effect()
   fetchAll$ = this.actions$

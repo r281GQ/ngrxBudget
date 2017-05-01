@@ -84,6 +84,43 @@ export class RepoService {
     return null;
   }
 
+  fetchBudget(identifier: number): Observable<Budget> {
+    return null;
+  }
+
+  createBudget(budget: Budget): Observable<Budget> {
+    return null;
+  }
+
+  updateBudget(budget: Budget): Observable<Budget> {
+    return null;
+  }
+
+  removeBudget(identifier: number): Observable<number> {
+    return null;
+  }
+
+  fetchBudgetPeriod(identifier: number): Observable<BudgetPeriod> {
+    return Observable.of({
+      identifier: 1,
+      name: 'whatever',
+      allowance: 100,
+      balance: 40,
+      currency: 'GBP',
+      period: '02-17',
+      budget: 1,
+      transactions :  [1,2]
+    });
+  }
+
+  // fetchBudgetPeriod(identifier: number): Observable<BudgetPeriod> {
+  //   return null;
+  // }
+
+  updateBudgetPeriod(budgetPeriod: BudgetPeriod): Observable<BudgetPeriod> {
+    return null;
+  }
+
   fetchAll(): Observable<any> {
     return null;
   }

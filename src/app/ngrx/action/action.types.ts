@@ -34,6 +34,20 @@ export const PERSIST_GROUPING: string = 'persistGrouping';
 export const CREATE_GROUPING: string = 'createGrouping';
 export const UPDATE_GROUPING: string = 'updateGrouping';
 
+export const FETCH_BUDGET: string = 'fetchBudget';
+export const REFRESH_BUDGET: string = 'refreshBudget';
+export const REMOVE_BUDGET: string = 'removeBudget';
+export const PERSIST_BUDGET: string = 'persistBudget';
+
+export const CREATE_BUDGET: string = 'createBudget';
+export const UPDATE_BUDGET: string = 'updateBudget';
+
+export const FETCH_BUDGET_PERIOD: string = 'fetchBudgetPeriod';
+export const REFRESH_BUDGET_PERIOD: string = 'refreshBudgetPeriod';
+
+export const CREATE_BUDGET_PERIOD: string = 'createBudgetPeriod';
+export const UPDATE_BUDGET_PERIOD: string = 'updateBudgetPeriod';
+
 export const FETCH_ALL: string = 'fetchAll';
 export const UPDATE_ALL: string = 'updateAll';
 

@@ -1,13 +1,27 @@
 import {Action} from "@ngrx/store";
 import {
-  CREATE_ACCOUNT, CREATE_TRANSACTION, UPDATE_ACCOUNT, UPDATE_ALL, CREATE_GROUPING, UPDATE_GROUPING,
-  CREATE_EQUITY, UPDATE_EQUITY, WIPE
+  CREATE_ACCOUNT,
+  CREATE_BUDGET,
+  CREATE_BUDGET_PERIOD,
+  CREATE_EQUITY,
+  CREATE_GROUPING,
+  CREATE_TRANSACTION,
+  UPDATE_ACCOUNT,
+  UPDATE_ALL,
+  UPDATE_BUDGET,
+  UPDATE_BUDGET_PERIOD,
+  UPDATE_EQUITY,
+  UPDATE_GROUPING,
+  WIPE
 } from "../action/action.types";
 import {handleAccountCreate, handleAccountUpdate} from "./model-reducer/account.reducer";
 import {handleTransactionCreation} from "./model-reducer/transaction.reducer";
 import {handleUpdateAll, wipe} from "app/ngrx/reducer/model-reducer/misc-handler";
 import {handleGroupingCreate, handleGroupingUpdate} from "./model-reducer/grouping.reducer";
 import {handleEquityCreate, handleEquityUpdate} from "./model-reducer/equity.reducer";
+import {handleBudgetUpdate} from "app/ngrx/reducer/model-reducer/budget.reducer";
+import {handleBudgetCreate} from "./model-reducer/budget.reducer";
+import {handleBudgetPeriodCreate, handleBudgetPeriodUpdate} from "app/ngrx/reducer/model-reducer/budgetPeriod.reducer";
 
 const model = (state, action: Action) => {
   switch (action.type) {
@@ -27,6 +41,14 @@ const model = (state, action: Action) => {
       return handleEquityCreate(state, action);
     case UPDATE_EQUITY:
       return handleEquityUpdate(state, action);
+    case CREATE_BUDGET:
+      return handleBudgetCreate(state, action);
+    case UPDATE_BUDGET:
+      return handleBudgetUpdate(state, action);
+    case CREATE_BUDGET_PERIOD:
+      return handleBudgetPeriodCreate(state, action);
+    case UPDATE_BUDGET_PERIOD:
+      return handleBudgetPeriodUpdate(state, action);
     case WIPE:
       return wipe(state, action);
     default:

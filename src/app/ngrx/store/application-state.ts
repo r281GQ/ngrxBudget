@@ -1,8 +1,7 @@
-/**
- * Created by veghe on 23/04/2017.
- */
+import {RouterState} from "@ngrx/router-store";
 
 export interface ApplicationState {
+  router: RouterState,
   auth: {
     user: {
       identifier: number
@@ -88,6 +87,9 @@ export interface ApplicationState {
 }
 
 export const INITIAL_STATE: ApplicationState = {
+  router: {
+    path: 'main'
+  },
   auth: {
     user: {
       identifier: undefined,
